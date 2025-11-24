@@ -2782,8 +2782,8 @@ def page_tournament(t_id: str):
                         st.rerun()
                     st.markdown("</div>", unsafe_allow_html=True)
 
-        else:
-            st.info("Área reservada ao organizador.")
+        #else:
+            #st.info("Área reservada ao organizador.")
 
         st.markdown("---")
 
