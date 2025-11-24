@@ -1,0 +1,467 @@
+{
+  "id": "F5.2_20SEX_20251024",
+  "nome": "PADEL4ALL EUL F5.2 / 6ª - Feira / 20h — 2025-10-24",
+  "model": "F5.2_20SEX",
+  "tipo": "UPDOWN",
+  "expected_pairs": 10,
+  "created": "2025-10-25T14:27:57.774861",
+  "date": {
+    "year": 2025,
+    "month": 10,
+    "day": 24
+  },
+  "pairs": [
+    {
+      "a": "Catarina Barão",
+      "b": "Francisca Viegas",
+      "name": "Catarina Barão / Francisca Viegas",
+      "seed_pts": 25
+    },
+    {
+      "a": "Diana Vicente",
+      "b": "Bárbara Vaz",
+      "name": "Diana Vicente / Bárbara Vaz",
+      "seed_pts": 167
+    },
+    {
+      "a": "Filipa Dias",
+      "b": "Carolina Pica",
+      "name": "Filipa Dias / Carolina Pica",
+      "seed_pts": 109
+    },
+    {
+      "a": "Nastasiia Kovalenko",
+      "b": "Mariia Krutko",
+      "name": "Nastasiia Kovalenko / Mariia Krutko",
+      "seed_pts": 126
+    },
+    {
+      "a": "Francisca Guedes",
+      "b": "Catarina Basto",
+      "name": "Francisca Guedes / Catarina Basto",
+      "seed_pts": 14
+    },
+    {
+      "a": "Rita Vizinho",
+      "b": "Sara Carvalho",
+      "name": "Rita Vizinho / Sara Carvalho",
+      "seed_pts": 69
+    },
+    {
+      "a": "Mariana Henriques",
+      "b": "Margarida Perneta",
+      "name": "Mariana Henriques / Margarida Perneta",
+      "seed_pts": 138
+    },
+    {
+      "a": "Rossana Barros",
+      "b": "Alina Cherezova",
+      "name": "Rossana Barros / Alina Cherezova",
+      "seed_pts": 91
+    },
+    {
+      "a": "Joana Parreira",
+      "b": "Joana Luís",
+      "name": "Joana Parreira / Joana Luís",
+      "seed_pts": 0
+    },
+    {
+      "a": "Sara Nucifera",
+      "b": "Sílvia Ripamonti",
+      "name": "Sara Nucifera / Sílvia Ripamonti",
+      "seed_pts": 0
+    }
+  ],
+  "courts": [
+    "Campo Central",
+    "Campo 11"
+  ],
+  "rounds": [
+    {
+      "n": 1,
+      "games": [
+        {
+          "phase": "groups",
+          "group": "A",
+          "round": 1,
+          "team_a": "Alexandra Neto / Ana",
+          "team_b": "Ana Timóteo / Ana Valdeira",
+          "court": "Campo Central",
+          "score": "4-3"
+        },
+        {
+          "phase": "groups",
+          "group": "A",
+          "round": 1,
+          "team_a": "Ana Lemos / Ana Luísa Basílio",
+          "team_b": "Ana Roldão / Ana Silva",
+          "court": "Campo 11",
+          "score": "3-3"
+        },
+        {
+          "phase": "groups",
+          "group": "B",
+          "round": 1,
+          "team_a": "Ana Matos / Ana Portugal",
+          "team_b": "Ana Costa / Ana Gonçalves",
+          "court": "Campo 10",
+          "score": "3-2"
+        },
+        {
+          "phase": "groups",
+          "group": "B",
+          "round": 1,
+          "team_a": "Adelina Dobroslavska / Alexandra Coelho",
+          "team_b": "Ana Silvério / Ana Teresa Ruas",
+          "court": "Campo 9",
+          "score": "1-4"
+        }
+      ]
+    },
+    {
+      "n": 2,
+      "games": [
+        {
+          "phase": "groups",
+          "group": "A",
+          "round": 2,
+          "team_a": "Alexandra Neto / Ana",
+          "team_b": "Ana Roldão / Ana Silva",
+          "court": "Campo Central",
+          "score": "2-3"
+        },
+        {
+          "phase": "groups",
+          "group": "A",
+          "round": 2,
+          "team_a": "Ana Timóteo / Ana Valdeira",
+          "team_b": "Ana Lemos / Ana Luísa Basílio",
+          "court": "Campo 11",
+          "score": "2-2"
+        },
+        {
+          "phase": "groups",
+          "group": "B",
+          "round": 2,
+          "team_a": "Ana Matos / Ana Portugal",
+          "team_b": "Ana Silvério / Ana Teresa Ruas",
+          "court": "Campo 10",
+          "score": "4-2"
+        },
+        {
+          "phase": "groups",
+          "group": "B",
+          "round": 2,
+          "team_a": "Ana Costa / Ana Gonçalves",
+          "team_b": "Adelina Dobroslavska / Alexandra Coelho",
+          "court": "Campo 9",
+          "score": "4-2"
+        }
+      ]
+    },
+    {
+      "n": 3,
+      "games": [
+        {
+          "phase": "groups",
+          "group": "A",
+          "round": 3,
+          "team_a": "Alexandra Neto / Ana",
+          "team_b": "Ana Lemos / Ana Luísa Basílio",
+          "court": "Campo Central",
+          "score": "3-3"
+        },
+        {
+          "phase": "groups",
+          "group": "A",
+          "round": 3,
+          "team_a": "Ana Roldão / Ana Silva",
+          "team_b": "Ana Timóteo / Ana Valdeira",
+          "court": "Campo 11",
+          "score": "2-2"
+        },
+        {
+          "phase": "groups",
+          "group": "B",
+          "round": 3,
+          "team_a": "Ana Matos / Ana Portugal",
+          "team_b": "Adelina Dobroslavska / Alexandra Coelho",
+          "court": "Campo 10",
+          "score": "3-2"
+        },
+        {
+          "phase": "groups",
+          "group": "B",
+          "round": 3,
+          "team_a": "Ana Silvério / Ana Teresa Ruas",
+          "team_b": "Ana Costa / Ana Gonçalves",
+          "court": "Campo 9",
+          "score": "3-4"
+        }
+      ]
+    },
+    {
+      "n": 4,
+      "games": [
+        {
+          "phase": "finals",
+          "round": 4,
+          "team_a": "Ana Roldão / Ana Silva",
+          "team_b": "Ana Costa / Ana Gonçalves",
+          "court": "Campo Central",
+          "score": "3-4"
+        },
+        {
+          "phase": "finals",
+          "round": 4,
+          "team_a": "Ana Matos / Ana Portugal",
+          "team_b": "Alexandra Neto / Ana",
+          "court": "Campo 11",
+          "score": "4-2"
+        },
+        {
+          "phase": "finals",
+          "round": 4,
+          "team_a": "Ana Lemos / Ana Luísa Basílio",
+          "team_b": "Adelina Dobroslavska / Alexandra Coelho",
+          "court": "Campo 10",
+          "score": "4-5"
+        },
+        {
+          "phase": "finals",
+          "round": 4,
+          "team_a": "Ana Silvério / Ana Teresa Ruas",
+          "team_b": "Ana Timóteo / Ana Valdeira",
+          "court": "Campo 9",
+          "score": "3-2"
+        }
+      ]
+    },
+    {
+      "n": 5,
+      "games": [
+        {
+          "phase": "finals",
+          "round": 5,
+          "placement": "1º e 2º lugar",
+          "team_a": "Ana Costa / Ana Gonçalves",
+          "team_b": "Ana Matos / Ana Portugal",
+          "court": "Campo Central",
+          "score": "4-3"
+        },
+        {
+          "phase": "finals",
+          "round": 5,
+          "placement": "3º e 4º lugar",
+          "team_a": "Ana Roldão / Ana Silva",
+          "team_b": "Alexandra Neto / Ana",
+          "court": "Campo 11",
+          "score": "3-5"
+        },
+        {
+          "phase": "finals",
+          "round": 5,
+          "placement": "5º e 6º lugar",
+          "team_a": "Adelina Dobroslavska / Alexandra Coelho",
+          "team_b": "Ana Silvério / Ana Teresa Ruas",
+          "court": "Campo 10",
+          "score": "4-2"
+        },
+        {
+          "phase": "finals",
+          "round": 5,
+          "placement": "7º e 8º lugar",
+          "team_a": "Ana Lemos / Ana Luísa Basílio",
+          "team_b": "Ana Timóteo / Ana Valdeira",
+          "court": "Campo 9",
+          "score": "3-4"
+        }
+      ]
+    }
+  ],
+  "matches": [
+    {
+      "phase": "groups",
+      "group": "A",
+      "round": 1,
+      "team_a": "Alexandra Neto / Ana",
+      "team_b": "Ana Timóteo / Ana Valdeira",
+      "court": "Campo Central",
+      "score": "4-3"
+    },
+    {
+      "phase": "groups",
+      "group": "A",
+      "round": 1,
+      "team_a": "Ana Lemos / Ana Luísa Basílio",
+      "team_b": "Ana Roldão / Ana Silva",
+      "court": "Campo 11",
+      "score": "3-3"
+    },
+    {
+      "phase": "groups",
+      "group": "B",
+      "round": 1,
+      "team_a": "Ana Matos / Ana Portugal",
+      "team_b": "Ana Costa / Ana Gonçalves",
+      "court": "Campo 10",
+      "score": "3-2"
+    },
+    {
+      "phase": "groups",
+      "group": "B",
+      "round": 1,
+      "team_a": "Adelina Dobroslavska / Alexandra Coelho",
+      "team_b": "Ana Silvério / Ana Teresa Ruas",
+      "court": "Campo 9",
+      "score": "1-4"
+    },
+    {
+      "phase": "groups",
+      "group": "A",
+      "round": 2,
+      "team_a": "Alexandra Neto / Ana",
+      "team_b": "Ana Roldão / Ana Silva",
+      "court": "Campo Central",
+      "score": "2-3"
+    },
+    {
+      "phase": "groups",
+      "group": "A",
+      "round": 2,
+      "team_a": "Ana Timóteo / Ana Valdeira",
+      "team_b": "Ana Lemos / Ana Luísa Basílio",
+      "court": "Campo 11",
+      "score": "2-2"
+    },
+    {
+      "phase": "groups",
+      "group": "B",
+      "round": 2,
+      "team_a": "Ana Matos / Ana Portugal",
+      "team_b": "Ana Silvério / Ana Teresa Ruas",
+      "court": "Campo 10",
+      "score": "4-2"
+    },
+    {
+      "phase": "groups",
+      "group": "B",
+      "round": 2,
+      "team_a": "Ana Costa / Ana Gonçalves",
+      "team_b": "Adelina Dobroslavska / Alexandra Coelho",
+      "court": "Campo 9",
+      "score": "4-2"
+    },
+    {
+      "phase": "groups",
+      "group": "A",
+      "round": 3,
+      "team_a": "Alexandra Neto / Ana",
+      "team_b": "Ana Lemos / Ana Luísa Basílio",
+      "court": "Campo Central",
+      "score": "3-3"
+    },
+    {
+      "phase": "groups",
+      "group": "A",
+      "round": 3,
+      "team_a": "Ana Roldão / Ana Silva",
+      "team_b": "Ana Timóteo / Ana Valdeira",
+      "court": "Campo 11",
+      "score": "2-2"
+    },
+    {
+      "phase": "groups",
+      "group": "B",
+      "round": 3,
+      "team_a": "Ana Matos / Ana Portugal",
+      "team_b": "Adelina Dobroslavska / Alexandra Coelho",
+      "court": "Campo 10",
+      "score": "3-2"
+    },
+    {
+      "phase": "groups",
+      "group": "B",
+      "round": 3,
+      "team_a": "Ana Silvério / Ana Teresa Ruas",
+      "team_b": "Ana Costa / Ana Gonçalves",
+      "court": "Campo 9",
+      "score": "3-4"
+    },
+    {
+      "phase": "finals",
+      "round": 4,
+      "team_a": "Ana Roldão / Ana Silva",
+      "team_b": "Ana Costa / Ana Gonçalves",
+      "court": "Campo Central",
+      "score": "3-4"
+    },
+    {
+      "phase": "finals",
+      "round": 4,
+      "team_a": "Ana Matos / Ana Portugal",
+      "team_b": "Alexandra Neto / Ana",
+      "court": "Campo 11",
+      "score": "4-2"
+    },
+    {
+      "phase": "finals",
+      "round": 4,
+      "team_a": "Ana Lemos / Ana Luísa Basílio",
+      "team_b": "Adelina Dobroslavska / Alexandra Coelho",
+      "court": "Campo 10",
+      "score": "4-5"
+    },
+    {
+      "phase": "finals",
+      "round": 4,
+      "team_a": "Ana Silvério / Ana Teresa Ruas",
+      "team_b": "Ana Timóteo / Ana Valdeira",
+      "court": "Campo 9",
+      "score": "3-2"
+    },
+    {
+      "phase": "finals",
+      "round": 5,
+      "placement": "1º e 2º lugar",
+      "team_a": "Ana Costa / Ana Gonçalves",
+      "team_b": "Ana Matos / Ana Portugal",
+      "court": "Campo Central",
+      "score": ""
+    },
+    {
+      "phase": "finals",
+      "round": 5,
+      "placement": "3º e 4º lugar",
+      "team_a": "Ana Roldão / Ana Silva",
+      "team_b": "Alexandra Neto / Ana",
+      "court": "Campo 11",
+      "score": ""
+    },
+    {
+      "phase": "finals",
+      "round": 5,
+      "placement": "5º e 6º lugar",
+      "team_a": "Adelina Dobroslavska / Alexandra Coelho",
+      "team_b": "Ana Silvério / Ana Teresa Ruas",
+      "court": "Campo 10",
+      "score": ""
+    },
+    {
+      "phase": "finals",
+      "round": 5,
+      "placement": "7º e 8º lugar",
+      "team_a": "Ana Lemos / Ana Luísa Basílio",
+      "team_b": "Ana Timóteo / Ana Valdeira",
+      "court": "Campo 9",
+      "score": ""
+    }
+  ],
+  "state": "scheduled",
+  "notices": {
+    "tipo": "Tipo de torneio guardado: Torneio Americano (Up & Down).",
+    "duplas": "10 duplas guardadas com sucesso.",
+    "campos": "Campos guardados: Campo Central, Campo 11, Campo 10, Campo 9.",
+    "jornadas": "Potes (Jornadas 4 e 5) gerados/atualizados com base na classificação."
+  }
+}

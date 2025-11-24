@@ -1,0 +1,194 @@
+{
+  "id": "F5.2_20SEX_20251024",
+  "nome": "PADEL4ALL EUL F5.2 / 6ª - Feira / 20h — 2025-10-24",
+  "model": "F5.2_20SEX",
+  "tipo": "UPDOWN",
+  "expected_pairs": 10,
+  "created": "2025-10-25T14:27:57.774861",
+  "date": {
+    "year": 2025,
+    "month": 10,
+    "day": 24
+  },
+  "pairs": [
+    {
+      "a": "Catarina Barão",
+      "b": "Francisca Viegas",
+      "name": "Catarina Barão / Francisca Viegas",
+      "seed_pts": 25
+    },
+    {
+      "a": "Diana Vicente",
+      "b": "Bárbara Vaz",
+      "name": "Diana Vicente / Bárbara Vaz",
+      "seed_pts": 167
+    },
+    {
+      "a": "Filipa Dias",
+      "b": "Carolina Pica",
+      "name": "Filipa Dias / Carolina Pica",
+      "seed_pts": 109
+    },
+    {
+      "a": "Nastasiia Kovalenko",
+      "b": "Mariia Krutko",
+      "name": "Nastasiia Kovalenko / Mariia Krutko",
+      "seed_pts": 126
+    },
+    {
+      "a": "Francisca Guedes",
+      "b": "Catarina Basto",
+      "name": "Francisca Guedes / Catarina Basto",
+      "seed_pts": 14
+    },
+    {
+      "a": "Rita Vizinho",
+      "b": "Sara Carvalho",
+      "name": "Rita Vizinho / Sara Carvalho",
+      "seed_pts": 69
+    },
+    {
+      "a": "Mariana Henriques",
+      "b": "Margarida Perneta",
+      "name": "Mariana Henriques / Margarida Perneta",
+      "seed_pts": 138
+    },
+    {
+      "a": "Rossana Barros",
+      "b": "Alina Cherezova",
+      "name": "Rossana Barros / Alina Cherezova",
+      "seed_pts": 91
+    },
+    {
+      "a": "Joana Parreira",
+      "b": "Joana Luís",
+      "name": "Joana Parreira / Joana Luís",
+      "seed_pts": 0
+    },
+    {
+      "a": "Sara Nucifera",
+      "b": "Sílvia Ripamonti",
+      "name": "Sara Nucifera / Sílvia Ripamonti",
+      "seed_pts": 0
+    }
+  ],
+  "courts": [
+    "Campo Central",
+    "Campo 10",
+    "Campo 9",
+    "Campo 8",
+    "Campo 7"
+  ],
+  "rounds": [
+    {
+      "n": 1,
+      "games": [
+        {
+          "phase": "updown",
+          "round": 1,
+          "team_a": "Filipa Dias / Carolina Pica",
+          "team_b": "Rossana Barros / Alina Cherezova",
+          "court": "Campo Central",
+          "score": ""
+        },
+        {
+          "phase": "updown",
+          "round": 1,
+          "team_a": "Nastasiia Kovalenko / Mariia Krutko",
+          "team_b": "Rita Vizinho / Sara Carvalho",
+          "court": "Campo 10",
+          "score": ""
+        },
+        {
+          "phase": "updown",
+          "round": 1,
+          "team_a": "Catarina Barão / Francisca Viegas",
+          "team_b": "Sara Nucifera / Sílvia Ripamonti",
+          "court": "Campo 9",
+          "score": ""
+        },
+        {
+          "phase": "updown",
+          "round": 1,
+          "team_a": "Diana Vicente / Bárbara Vaz",
+          "team_b": "Joana Parreira / Joana Luís",
+          "court": "Campo 8",
+          "score": ""
+        },
+        {
+          "phase": "updown",
+          "round": 1,
+          "team_a": "Francisca Guedes / Catarina Basto",
+          "team_b": "Mariana Henriques / Margarida Perneta",
+          "court": "Campo 7",
+          "score": ""
+        }
+      ]
+    },
+    {
+      "n": 2,
+      "games": []
+    },
+    {
+      "n": 3,
+      "games": []
+    },
+    {
+      "n": 4,
+      "games": []
+    },
+    {
+      "n": 5,
+      "games": []
+    }
+  ],
+  "matches": [
+    {
+      "phase": "updown",
+      "round": 1,
+      "team_a": "Filipa Dias / Carolina Pica",
+      "team_b": "Rossana Barros / Alina Cherezova",
+      "court": "Campo Central",
+      "score": ""
+    },
+    {
+      "phase": "updown",
+      "round": 1,
+      "team_a": "Nastasiia Kovalenko / Mariia Krutko",
+      "team_b": "Rita Vizinho / Sara Carvalho",
+      "court": "Campo 10",
+      "score": ""
+    },
+    {
+      "phase": "updown",
+      "round": 1,
+      "team_a": "Catarina Barão / Francisca Viegas",
+      "team_b": "Sara Nucifera / Sílvia Ripamonti",
+      "court": "Campo 9",
+      "score": ""
+    },
+    {
+      "phase": "updown",
+      "round": 1,
+      "team_a": "Diana Vicente / Bárbara Vaz",
+      "team_b": "Joana Parreira / Joana Luís",
+      "court": "Campo 8",
+      "score": ""
+    },
+    {
+      "phase": "updown",
+      "round": 1,
+      "team_a": "Francisca Guedes / Catarina Basto",
+      "team_b": "Mariana Henriques / Margarida Perneta",
+      "court": "Campo 7",
+      "score": ""
+    }
+  ],
+  "state": "scheduled",
+  "notices": {
+    "tipo": "Tipo de torneio guardado: Torneio Americano (Up & Down).",
+    "duplas": "10 duplas guardadas com sucesso.",
+    "campos": "Campos guardados: Campo Central, Campo 10, Campo 9, Campo 8, Campo 7.",
+    "jornadas": "Jornadas geradas e guardadas com sucesso."
+  }
+}
