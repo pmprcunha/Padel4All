@@ -8,40 +8,6 @@ from pathlib import Path
 from typing import List, Dict, Tuple
 from datetime import date, datetime
 
-# =========================================================
-# BOOTSTRAP STREAMLIT (auto-abre no browser local)
-# =========================================================
-def _under_streamlit() -> bool:
-    return os.environ.get("PADEL4ALL_BOOTSTRAPPED") == "1"
-
-
-if not _under_streamlit():
-    import threading
-    import subprocess
-    import webbrowser
-
-    app_path = os.path.abspath(sys.argv[0])
-    env = os.environ.copy()
-    env["PADEL4ALL_BOOTSTRAPPED"] = "1"
-
-    threading.Timer(1.0, lambda: webbrowser.open("http://localhost:8501")).start()
-
-    cmd = [
-        sys.executable,
-        "-m",
-        "streamlit",
-        "run",
-        app_path,
-        "--server.headless=false",
-    ]
-
-    try:
-        subprocess.run(cmd, check=False, env=env)
-    except KeyboardInterrupt:
-        pass
-
-    sys.exit(0)
-
 
 # =========================================================
 # IMPORTS DA APP
