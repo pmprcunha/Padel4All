@@ -2808,39 +2808,121 @@ def page_tournament(t_id: str):
         )
 
     if sec == "Ranking":
-        top3, tabela_restante = compute_ranking_with_momentum(expanded)
-
-        podium_with_tooltips(top3)
-
-        if not tabela_restante.empty:
-            def _color_delta(val: str) -> str:
-                if isinstance(val, str):
-                    val_strip = val.strip()
-                    if val_strip.startswith("▲"):
-                        return "color: #3bd16f; font-weight: 700;"
-                    if val_strip.startswith("▼"):
-                        return "color: #ff4d4d; font-weight: 700;"
-                return ""
-
-            styled = (
-                tabela_restante
-                .style
-                .applymap(_color_delta, subset=["Var"])
-                .set_properties(subset=["Pos", "Var"], **{
-                    "text-align": "center",
-                    "font-weight": "600",
-                })
-                .format({"Média de Pontos": "{:.2f}"})
-            )
-
-            st.dataframe(
-                styled,
-                use_container_width=True,
-                height=540,
-                hide_index=True,
-            )
+        if expanded.empty:
+            st.info("Ainda não existem dados para este torneio.")
         else:
-            st.info("Ainda não existem jogadores(as) suficientes para tabela além do pódio.")
+            # Tabs: Global vs Mensal
+            tab_global, tab_month = st.tabs(["Ranking Global", "Ranking Mensal"])
+
+            # ===============================
+            #   TAB 1 — RANKING GLOBAL
+            # ===============================
+            with tab_global:
+                top3, tabela_restante = compute_ranking_with_momentum(expanded)
+
+                # pódio (usa top3)
+                podium_with_tooltips(top3)
+
+                # tabela com coluna "Var" (4.º lugar em diante)
+                if not tabela_restante.empty:
+                    def _color_delta(val: str) -> str:
+                        """
+                        Retorna CSS inline para cada célula da coluna 'Var'.
+                        Verde se subir (▲ ...), vermelho se descer (▼ ...), default sem cor.
+                        """
+                        if isinstance(val, str):
+                            val_strip = val.strip()
+                            if val_strip.startswith("▲"):
+                                return "color: #3bd16f; font-weight: 700;"
+                            if val_strip.startswith("▼"):
+                                return "color: #ff4d4d; font-weight: 700;"
+                        return ""
+
+                    styled = (
+                        tabela_restante
+                        .style
+                        .applymap(_color_delta, subset=["Var"])
+                        .set_properties(subset=["Pos", "Var"], **{
+                            "text-align": "center",
+                            "font-weight": "600",
+                        })
+                        .format({"Média de Pontos": "{:.2f}"})
+                    )
+
+                    st.dataframe(
+                        styled,
+                        use_container_width=True,
+                        height=540,
+                        hide_index=True,
+                    )
+                else:
+                    st.info("Ainda não existem jogadores(as) suficientes para tabela além do pódio.")
+
+                # export CSV global (sem cores)
+                st.download_button(
+                    "Descarregar ranking global (CSV)",
+                    data=tabela_restante.to_csv(index=False).encode("utf-8"),
+                    file_name=f"ranking_global_{t_id}.csv",
+                    mime="text/csv",
+                )
+
+            # ===============================
+            #   TAB 2 — RANKING MENSAL
+            # ===============================
+            with tab_month:
+                # Selecionar Ano e Mês disponíveis neste torneio
+                col1, col2 = st.columns(2)
+                with col1:
+                    years = sorted(expanded["Year"].dropna().unique(), reverse=True)
+                    year_sel = st.selectbox("Ano", options=years, index=0, key=f"rk_year_{t_id}")
+                with col2:
+                    months = sorted(
+                        expanded[expanded["Year"] == year_sel]["Month"].dropna().unique(),
+                        key=lambda mm: MONTH_INDEX.get(mm, 99),
+                    )
+                    # por defeito, último mês cronológico
+                    default_month_idx = len(months) - 1 if months else 0
+                    month_sel = st.selectbox(
+                        "Mês",
+                        options=months,
+                        index=default_month_idx,
+                        key=f"rk_month_{t_id}",
+                    )
+
+                # Filtrar apenas aquele ano/mês
+                expanded_month = expanded[
+                    (expanded["Year"] == year_sel) & (expanded["Month"] == month_sel)
+                ].copy()
+
+                if expanded_month.empty:
+                    st.info("Sem dados para o ano/mês selecionado.")
+                else:
+                    # Ranking simples para aquele mês
+                    rk_month = compute_ranking(expanded_month)
+
+                    # pódio mensal
+                    top3_m = rk_month.head(3)
+                    podium_with_tooltips(top3_m)
+
+                    # resto da tabela (4.º lugar em diante)
+                    restante_m = rk_month.iloc[3:].copy()
+                    if not restante_m.empty:
+                        st.dataframe(
+                            restante_m,
+                            use_container_width=True,
+                            height=540,
+                            hide_index=True,
+                        )
+                    else:
+                        st.info("Sem posições adicionais além do pódio para este mês.")
+
+                    # export CSV mensal
+                    st.download_button(
+                        f"Descarregar ranking mensal ({month_sel} {year_sel})",
+                        data=rk_month.to_csv(index=False).encode("utf-8"),
+                        file_name=f"ranking_mensal_{t_id}_{year_sel}_{month_sel}.csv",
+                        mime="text/csv",
+                    )
 
         st.download_button(
             "Descarregar ranking (CSV)",
