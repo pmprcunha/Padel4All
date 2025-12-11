@@ -129,6 +129,7 @@ TOURNAMENTS = [
 
 # sistema de pontos por nº de equipas (expandido com 10 e 14)
 POINTS_SYSTEM: Dict[int, List[int]] = {
+    4:  [6, 4, 3, 2],
     6:  [8, 6, 4, 3, 2, 1],
     8:  [11, 9, 7, 6, 4, 3, 2, 1],
     10: [14, 12, 10, 9, 7, 6, 5, 4, 2, 1],
