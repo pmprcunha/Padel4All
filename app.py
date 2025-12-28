@@ -24,11 +24,14 @@ st.set_page_config(
     page_title="Gestão de torneios e eventos",
     page_icon="▣",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 # Código do organizador (podes alterar aqui ou via env var PADEL4ALL_ADMIN_PASSWORD)
-ADMIN_PASSWORD = os.environ.get("PADEL4ALL_ADMIN_PASSWORD", "padel4all")
+ADMIN_PASSWORD = st.secrets.get("PADEL4ALL_ADMIN_PASSWORD", os.environ.get("PADEL4ALL_ADMIN_PASSWORD"))
+if not ADMIN_PASSWORD:
+    st.error("ADMIN_PASSWORD não definido (secrets/env).")
+    st.stop()
 
 # ficheiros históricos por modelo
 MODEL_DATA_FILES = {
@@ -220,8 +223,12 @@ def inject_styles():
           --bg:#0f1115; --panel:#151922; --panel-2:#1a1f2b; --text:#e7eaf0; --muted:#9aa4b2; --border:#2a2f3a;
           --gold:#d4af37; --silver:#c0c0c0; --bronze:#cd7f32;
         }
+
+        /* Base */
         .stApp{background:var(--bg);color:var(--text)}
         #MainMenu{display:none} footer{visibility:hidden;height:0}
+
+        /* Espaçamento entre blocos (desktop + sidebar) */
         [data-testid="stVerticalBlock"] > div:not(:last-child),
         [data-testid="stVerticalBlock"] > section:not(:last-child),
         [data-testid="column"] [data-testid="stVerticalBlock"] > div:not(:last-child),
@@ -232,6 +239,7 @@ def inject_styles():
         }
         hr{margin:var(--space)0!important;}
 
+        /* Cartões / painéis */
         .panel{
           background:linear-gradient(180deg,var(--panel),var(--panel-2));
           border:1px solid var(--border);border-radius:16px;padding:18px;
@@ -242,6 +250,7 @@ def inject_styles():
         .sub{font-size:13px;color:var(--muted);margin:0}
         .div{height:1px;background:var(--border);}
 
+        /* Métricas */
         .metric{
           background:linear-gradient(180deg,#141926,#0f141f);
           border:1px solid var(--border);border-radius:14px;padding:16px
@@ -249,6 +258,7 @@ def inject_styles():
         .metric .lbl{font-size:12px;color:var(--muted)}
         .metric .val{font-size:28px;font-weight:800;margin-top:6px;letter-spacing:.3px}
 
+        /* Hero */
         .hero{
           position:relative;overflow:hidden;border-radius:18px;padding:22px 22px;
           background:
@@ -260,6 +270,7 @@ def inject_styles():
         .hero h1{margin:0 0 6px 0;font-size:28px;font-weight:900;letter-spacing:.2px}
         .hero p{margin:0;color:var(--muted)}
 
+        /* Botões grandes na Home */
         #home-row + div{display:flex;gap:16px;width:100%;}
         #home-row + div [data-testid="column"]{flex:1 1 0!important;display:flex;}
         #home-row + div [data-testid="column"] .stButton{width:100%;display:flex;flex:1;}
@@ -280,6 +291,7 @@ def inject_styles():
         }
         #home-row + div [data-testid="column"] .stButton>button:active{transform:translateY(-1px);}
 
+        /* Card de seleção */
         .select-card{
           background:linear-gradient(180deg,#121828,#0f1522);
           border:1px solid var(--border);
@@ -290,6 +302,7 @@ def inject_styles():
         .select-card .title{font-weight:700;margin-bottom:8px}
         .select-card .hint{color:var(--muted);font-size:13px;margin-top:6px}
 
+        /* Botão entrar */
         .enter-wrap .stButton>button{
           width:100%;border-radius:12px;padding:12px 14px;
           border:1px solid rgba(255,255,255,.14);
@@ -303,10 +316,12 @@ def inject_styles():
           box-shadow:0 12px 28px rgba(0,0,0,.36);
         }
 
+        /* Select centrado */
         .select-center [data-baseweb="select"]{text-align:center;}
         .select-center [data-baseweb="select"] *{text-align:center!important;}
         .select-center [data-baseweb="select"]>div{justify-content:center!important;}
 
+        /* Pódio */
         .podium{text-align:center;position:relative}
         .badge{display:inline-block;padding:3px 10px;border:1px solid var(--border);border-radius:999px;font-size:12px}
         .gold{border-color:var(--gold);color:var(--gold)}
@@ -322,6 +337,48 @@ def inject_styles():
             box-shadow:0 10px 24px rgba(0,0,0,.35)
         }
         .podium:hover .tip{opacity:1;bottom:-10px}
+
+        /* =========================
+           Mobile tweaks (responsivo)
+           ========================= */
+        @media (max-width: 768px){
+          :root{
+            --space:12px;
+            --btn-h:64px;
+          }
+
+          /* Tipografia mais contida */
+          .hdr{font-size:20px}
+          .sub{font-size:12px}
+          .hero{padding:16px;border-radius:16px}
+          .hero h1{font-size:22px}
+          .metric .val{font-size:22px}
+
+          /* Menos padding em cards */
+          .panel{padding:14px;border-radius:14px}
+          .select-card{padding:14px;border-radius:14px}
+
+          /* Inputs amigáveis para iOS (evita zoom por fonte pequena) */
+          input, textarea{font-size:16px !important;}
+
+          /* Botões grandes ajustados ao mobile */
+          #home-row + div{gap:12px;}
+          #home-row + div [data-testid="column"] .stButton>button{
+            border-radius:14px;
+            padding:14px 14px;
+            font-size:15px;
+          }
+
+          /* Sidebar: não forçar larguras fixas (caso haja CSS noutro sítio) */
+          section[data-testid="stSidebar"]{
+            width:auto !important;
+            min-width:auto !important;
+            max-width:auto !important;
+          }
+
+          /* Dataframes: altura mais controlada */
+          .stDataFrame{max-height:420px;}
+        }
         </style>
         """,
         unsafe_allow_html=True,
@@ -1820,6 +1877,214 @@ def compute_final_classification_from_updown(t: Dict) -> pd.DataFrame:
 
     return pd.DataFrame(placements, columns=["Pos", "Dupla / Equipa"])
 
+def render_pairs_editor(
+    t: Dict,
+    tid: str,
+    known_players: List[str],
+    pmap: Dict[str, int],
+) -> None:
+    """
+    UI (mobile-friendly) para editar/guardar duplas/equipas usando st.data_editor + st.form.
+    Substitui o bloco atual com múltiplos selectboxes/text_inputs em loop.
+
+    Requisitos esperados no dict t:
+      - t["tipo"] definido
+      - t["expected_pairs"] definido
+      - t["pairs"] lista de dicts {a,b,name,seed_pts}
+    """
+    expected_pairs = int(t.get("expected_pairs") or 0)
+
+    if not t.get("tipo"):
+        st.info("Defina o tipo de torneio no passo 1 para listar as duplas.")
+        return
+
+    if expected_pairs <= 0:
+        st.info("Defina o número de duplas e guarde o tipo no passo 1.")
+        return
+
+    existing = (
+        sorted(
+            t.get("pairs", []),
+            key=lambda x: (-x.get("seed_pts", 0), x.get("name", "")),
+        )
+        if t.get("pairs")
+        else []
+    )
+
+    # Construir grelha inicial
+    rows = [{"Jogador A": "", "Jogador B": ""} for _ in range(expected_pairs)]
+    for i in range(min(len(existing), expected_pairs)):
+        rows[i]["Jogador A"] = existing[i].get("a", "")
+        rows[i]["Jogador B"] = existing[i].get("b", "")
+
+    df_pairs = pd.DataFrame(rows)
+
+    st.caption(f"Duplas a preencher: **{expected_pairs}**")
+
+    with st.form(key=f"form_pairs_{tid}"):
+        edited = st.data_editor(
+            df_pairs,
+            hide_index=True,
+            use_container_width=True,
+            num_rows="fixed",
+            column_config={
+                "Jogador A": st.column_config.SelectboxColumn(
+                    "Jogador A",
+                    options=[""] + list(known_players),
+                    required=False,
+                    help="Seleciona da lista.",
+                ),
+                "Jogador B": st.column_config.SelectboxColumn(
+                    "Jogador B",
+                    options=[""] + list(known_players),
+                    required=False,
+                    help="Seleciona da lista.",
+                ),
+            },
+        )
+        save_pairs = st.form_submit_button("Guardar duplas", type="primary")
+
+    if not save_pairs:
+        return
+
+    # Validar e guardar
+    full_pairs: List[Tuple[str, str]] = []
+    for _, r in edited.iterrows():
+        a = str(r.get("Jogador A", "")).strip()
+        b = str(r.get("Jogador B", "")).strip()
+
+        if a or b:
+            if not a or not b:
+                st.error("Há linhas incompletas. Preenche A e B em todas as duplas usadas.")
+                return
+            full_pairs.append((a, b))
+
+    if len(full_pairs) != expected_pairs:
+        st.error(
+            f"Preencha exatamente **{expected_pairs}** duplas completas "
+            f"(tem {len(full_pairs)})."
+        )
+        return
+
+    # Construir estrutura final (com seed_pts)
+    pairs_to_keep = []
+    for a, b in full_pairs:
+        seed_pts = int(pmap.get(a, 0) + pmap.get(b, 0))
+        pairs_to_keep.append(
+            {"a": a, "b": b, "name": pair_key(a, b), "seed_pts": seed_pts}
+        )
+
+    # Guardar e ajustar courts automaticamente como fazias antes
+    t["pairs"] = pairs_to_keep
+
+    if t["tipo"] == "UPDOWN":
+        max_courts = max(1, len(t["pairs"]) // 2)
+        if not t.get("courts"):
+            t["courts"] = order_courts_desc(ALL_COURTS)[:max_courts]
+        elif len(t["courts"]) != max_courts:
+            t["courts"] = order_courts_desc(t["courts"])[:max_courts]
+    else:
+        req_map = {"LIGA6": 3, "G2x4": 4, "G3x4": 6, "G4x4": 8}
+        req = req_map.get(t["tipo"])
+        if req:
+            t["courts"] = order_courts_desc(ALL_COURTS)[:req]
+
+    t.setdefault("notices", {})
+    t["notices"]["duplas"] = f"{len(t['pairs'])} duplas guardadas com sucesso."
+    save_tournament(t)
+    st.success(t["notices"]["duplas"])
+    st.rerun()
+
+
+def render_round_results_editor(
+    t: Dict,
+    rnd: Dict,
+    is_groups: bool,
+    is_updown: bool,
+) -> None:
+    """
+    UI (mobile-friendly) para editar/guardar resultados de uma jornada usando st.data_editor + st.form.
+    Substitui o loop com st.text_input por jogo.
+
+    - t: dict do torneio (para save_tournament + lógica updown/finais)
+    - rnd: dict de uma jornada (ex: {"n": 2, "games":[...]} )
+    """
+
+    jn = int(rnd.get("n", 0))
+    games = rnd.get("games", []) or []
+
+    if not games:
+        st.info("Sem jogos nesta jornada.")
+        return
+
+    # Montar DataFrame editável (inclui indicador Guardado)
+    rows = []
+    for i, m in enumerate(games):
+        score_now = (m.get("score") or "").strip()
+        rows.append(
+            {
+                "Jogo": i + 1,
+                "Fase": m.get("phase", ""),
+                "Grupo": m.get("group", "") if m.get("phase") == "groups" else "",
+                "Placement": m.get("placement", "") if m.get("phase") == "finals" else "",
+                "Equipa A": m.get("team_a", ""),
+                "Equipa B": m.get("team_b", ""),
+                "Campo": m.get("court", ""),
+                "Resultado": score_now,
+                "Guardado": "✅" if score_now else "",
+            }
+        )
+
+    df = pd.DataFrame(rows)
+
+    with st.form(key=f"form_round_{t['id']}_{jn}"):
+        edited = st.data_editor(
+            df,
+            hide_index=True,
+            use_container_width=True,
+            num_rows="fixed",
+            disabled=[
+                "Jogo",
+                "Fase",
+                "Grupo",
+                "Placement",
+                "Equipa A",
+                "Equipa B",
+                "Campo",
+                "Guardado",
+            ],
+            column_config={
+                "Resultado": st.column_config.TextColumn(
+                    "Resultado (ex.: 4-1)",
+                    help="Formato X-Y (ex.: 6-4). Evita empates.",
+                ),
+                "Guardado": st.column_config.TextColumn(""),
+            },
+        )
+
+        submitted = st.form_submit_button(
+            f"Guardar resultados da jornada {jn}",
+            type="primary",
+        )
+
+    if not submitted:
+        return
+
+    # Aplicar resultados ao objeto original
+    new_scores = edited["Resultado"].fillna("").tolist()
+    for i, score_val in enumerate(new_scores):
+        games[i]["score"] = str(score_val).strip()
+
+    # Lógicas especiais após guardar
+    if is_updown:
+        _updown_build_next_round(t, jn)
+    elif jn == 4:
+        _recalculate_round5_from_round4(t)
+
+    save_tournament(t)
+    st.success(f"Resultados da jornada {jn} guardados.")
+    st.rerun()
+
 
 # =========================================================
 # SUPPORT / CSV LEGADO
@@ -1894,6 +2159,7 @@ def append_final_table_to_csv_if_applicable(t: Dict):
             writer.writeheader()
         for row in rows:
             writer.writerow(row)
+    st.cache_data.clear()
 
 
 # =========================================================
@@ -2187,116 +2453,13 @@ def page_manage_tournament(tid: str):
 
         expected_pairs = int(t.get("expected_pairs") or 0)
 
-        if not t.get("tipo"):
-            st.info("Defina o tipo de torneio no passo 1 para listar as duplas.")
-        elif expected_pairs == 0 and t["tipo"] != "UPDOWN":
-            st.info("Este formato requer um número fixo de duplas. Guarde o tipo para continuar.")
-        else:
-            if t["tipo"] == "UPDOWN":
-                lines = expected_pairs
-            else:
-                lines = expected_pairs
-
-            existing = (
-                sorted(
-                    t.get("pairs", []),
-                    key=lambda x: (-x.get("seed_pts", 0), x["name"]),
-                )
-                if t.get("pairs")
-                else []
-            )
-
-            st.caption(
-                f"Duplas a preencher: **{lines}** "
-                f"(existentes: {len(existing)})"
-            )
-
-            new_rows = []
-            for i in range(lines):
-                a_pref = existing[i]["a"] if i < len(existing) else ""
-                b_pref = existing[i]["b"] if i < len(existing) else ""
-
-                c1, c2, c3 = st.columns([3, 3, 1])
-                with c1:
-                    a_sel = st.selectbox(
-                        f"Jogador(a) A — linha {i+1}",
-                        options=[""] + known_players,
-                        index=(1 + known_players.index(a_pref)) if a_pref in known_players else 0,
-                        key=f"pair_a_sel_{tid}_{i}",
-                        help="Escolha da lista ou deixe vazio e escreva ao lado.",
-                    )
-                    a_manual = st.text_input(
-                        "Ou escrever A",
-                        value="" if a_sel else a_pref,
-                        key=f"pair_a_manual_{tid}_{i}",
-                    )
-                with c2:
-                    b_sel = st.selectbox(
-                        f"Jogador(a) B — linha {i+1}",
-                        options=[""] + known_players,
-                        index=(1 + known_players.index(b_pref)) if b_pref in known_players else 0,
-                        key=f"pair_b_sel_{tid}_{i}",
-                        help="Escolha da lista ou deixe vazio e escreva ao lado.",
-                    )
-                    b_manual = st.text_input(
-                        "Ou escrever B",
-                        value="" if b_sel else b_pref,
-                        key=f"pair_b_manual_{tid}_{i}",
-                    )
-                with c3:
-                    st.markdown("&nbsp;", unsafe_allow_html=True)
-                    st.write(f"#{i+1}")
-
-                a_val = (a_sel or a_manual).strip()
-                b_val = (b_sel or b_manual).strip()
-                if a_val or b_val:
-                    new_rows.append((a_val, b_val))
-
-            can_save = True
-            full_pairs = [(a, b) for (a, b) in new_rows if a and b]
-            if len(full_pairs) != expected_pairs:
-                can_save = False
-                st.warning(
-                    f"Preencha exatamente **{expected_pairs}** duplas completas "
-                    f"(tem {len(full_pairs)})."
-                )
-
-            if st.button("Guardar duplas", key=f"btn_save_pairs_{tid}", disabled=not can_save):
-                pairs_to_keep = []
-                for a, b in full_pairs:
-                    seed_pts = pmap.get(a, 0) + pmap.get(b, 0)
-                    pairs_to_keep.append(
-                        {"a": a, "b": b, "name": pair_key(a, b), "seed_pts": seed_pts}
-                    )
-
-                if (
-                    t["tipo"] != "UPDOWN"
-                    and expected_pairs
-                    and len(pairs_to_keep) > expected_pairs
-                ):
-                    pairs_to_keep = sorted(
-                        pairs_to_keep,
-                        key=lambda x: (-x["seed_pts"], x["name"]),
-                    )[:expected_pairs]
-
-                t["pairs"] = pairs_to_keep
-
-                if t["tipo"] == "UPDOWN":
-                    max_courts = max(1, len(t["pairs"]) // 2)
-                    if not t.get("courts"):
-                        t["courts"] = order_courts_desc(ALL_COURTS)[:max_courts]
-                    elif len(t["courts"]) != max_courts:
-                        t["courts"] = order_courts_desc(t["courts"])[:max_courts]
-                else:
-                    req_map = {"LIGA6": 3, "G2x4": 4, "G3x4": 6, "G4x4": 8}
-                    req = req_map.get(t["tipo"])
-                    if req:
-                        t["courts"] = order_courts_desc(ALL_COURTS)[:req]
-
-                t["notices"]["duplas"] = f"{len(t['pairs'])} duplas guardadas com sucesso."
-                save_tournament(t)
-                st.success(t["notices"]["duplas"])
-                st.rerun()
+        # UI nova (mobile-friendly) para editar duplas
+        render_pairs_editor(
+            t=t,
+            tid=tid,
+            known_players=known_players,
+            pmap=pmap,
+        )
 
         st.markdown("---")
 
@@ -2549,54 +2712,17 @@ def page_manage_tournament(tid: str):
 
             st.markdown("### Inserção de Resultados")
 
-            rounds_sorted = sorted(
-                t.get("rounds", []), key=lambda R: int(R.get("n", 0))
-            )
+            rounds_sorted = sorted(t.get("rounds", []), key=lambda R: int(R.get("n", 0)))
             for rnd in rounds_sorted:
                 jn = int(rnd.get("n", 0))
                 st.markdown(f"#### Jornada {jn}")
 
-                jornada_scores = []
-
-                for i, m in enumerate(rnd["games"]):
-                    c1, c2, c3, c4 = st.columns([3, 2, 2, 1])
-                    with c1:
-                        if m.get("phase") == "finals" and m.get("placement"):
-                            label = f"**{m.get('placement')}** — {m['team_a']} vs {m['team_b']}"
-                        else:
-                            label = f"**{m['team_a']}** vs **{m['team_b']}**"
-                            if m.get("phase") == "groups":
-                                label += f"  ·  Grupo {m.get('group','-')}"
-                        st.write(label)
-                    with c2:
-                        st.write(f"Campo: {m.get('court', '-')}")
-                    with c3:
-                        key = f"score_{t['id']}_{jn}_{i}"
-                        new_score = st.text_input(
-                            "Resultado (ex.: 4-1)",
-                            value=m.get("score", ""),
-                            key=key,
-                        )
-                        jornada_scores.append((i, new_score))
-                    with c4:
-                        if m.get("score"):
-                            st.caption("✅ Guardado")
-
-                if st.button(
-                    f"Guardar resultados da jornada {jn}",
-                    key=f"save_round_{t['id']}_{jn}",
-                ):
-                    for idx_jogo, score_val in jornada_scores:
-                        rnd["games"][idx_jogo]["score"] = score_val.strip()
-
-                    if is_updown:
-                        _updown_build_next_round(t, jn)
-                    elif jn == 4:
-                        _recalculate_round5_from_round4(t)
-
-                    save_tournament(t)
-                    st.success(f"Resultados da jornada {jn} guardados.")
-                    st.rerun()
+                render_round_results_editor(
+                    t=t,
+                    rnd=rnd,
+                    is_groups=is_groups,
+                    is_updown=is_updown,
+                )
 
                 st.markdown("---")
 
@@ -2734,12 +2860,11 @@ def page_tournament(t_id: str):
         sec = st.radio(
             "Navegação",
             options=["Ranking", "Resultados", "Estatísticas"],
-            index=["Ranking", "Resultados", "Estatísticas"].index(
-                st.session_state.get("sec", "Ranking")
-            ),
-            key="sec_radio",
+            index=["Ranking", "Resultados", "Estatísticas"].index(st.session_state.get("sec", "Ranking")),
+            horizontal=True,
             label_visibility="collapsed",
         )
+        st.session_state["sec"] = sec
         st.markdown("---")
 
         st.markdown("### Área do organizador")
