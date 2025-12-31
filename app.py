@@ -16,7 +16,6 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-
 # =========================================================
 # CONFIGURAÇÃO BASE
 # =========================================================
@@ -27,11 +26,25 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# Código do organizador (podes alterar aqui ou via env var PADEL4ALL_ADMIN_PASSWORD)
-ADMIN_PASSWORD = st.secrets.get("PADEL4ALL_ADMIN_PASSWORD", os.environ.get("PADEL4ALL_ADMIN_PASSWORD"))
+# =========================================================
+# PASSWORD DO ORGANIZADOR (fallback rápido)
+# =========================================================
+# 1) tenta ir buscar ao Streamlit Cloud secrets
+# 2) tenta ir buscar a variável de ambiente
+# 3) fallback hardcoded (para despachar)
+ADMIN_PASSWORD = None
+
+try:
+    # Streamlit Cloud: .streamlit/secrets.toml
+    ADMIN_PASSWORD = st.secrets.get("ADMIN_PASSWORD")
+except Exception:
+    ADMIN_PASSWORD = None
+
 if not ADMIN_PASSWORD:
-    st.error("ADMIN_PASSWORD não definido (secrets/env).")
-    st.stop()
+    ADMIN_PASSWORD = os.environ.get("PADEL4ALL_ADMIN_PASSWORD")
+
+if not ADMIN_PASSWORD:
+    ADMIN_PASSWORD = "padel4all"
 
 # ficheiros históricos por modelo
 MODEL_DATA_FILES = {
@@ -577,20 +590,28 @@ def players_index(expanded: pd.DataFrame) -> pd.DataFrame:
     if partners_df.empty:
         tops = pd.DataFrame(columns=["Jogador(a)", "Parceiras(os) frequentes"])
     else:
-        tops = (
+        TOP_N = 5
+
+        counts = (
             partners_df.groupby(["Jogador(a)", "Parceiro(a)"])
             .size()
             .reset_index(name="Contagem")
-            .sort_values(["Jogador(a)", "Contagem"], ascending=[True, False])
-            .groupby("Jogador(a)")
-            .apply(
-                lambda g: ", ".join(
-                    [
-                        f"{r['Parceiro(a)']} ({int(r['Contagem'])})"
-                        for _, r in g.head(3).iterrows()
-                    ]
-                )
-            )
+            .sort_values(["Jogador(a)", "Contagem", "Parceiro(a)"], ascending=[True, False, True])
+        )
+
+        def _fmt(g: pd.DataFrame) -> str:
+            top = g.head(TOP_N)
+            shown = ", ".join([f"{r['Parceiro(a)']} ({int(r['Contagem'])})" for _, r in top.iterrows()])
+            total = int(g["Contagem"].sum())
+            top_sum = int(top["Contagem"].sum())
+            rest = total - top_sum
+            if rest > 0:
+                return f"{shown}, Outros ({rest})"
+            return shown
+
+        tops = (
+            counts.groupby("Jogador(a)", group_keys=False)
+            .apply(_fmt)
             .reset_index(name="Parceiras(os) frequentes")
         )
 
@@ -2983,12 +3004,24 @@ def page_tournament(t_id: str):
                     )
                 else:
                     st.info("Ainda não existem jogadores(as) suficientes para tabela além do pódio.")
+            
+                # export CSV (ranking completo: top3 + restante)
+                ranking_full = pd.concat(
+                    [
+                        top3.assign(Pos=[1, 2, 3], Var=["", "", ""])[
+                            ["Pos", "Var", "Jogador(a)", "Pontos Totais", "Participações", "Média de Pontos"]
+                        ],
+                        tabela_restante[
+                            ["Pos", "Var", "Jogador(a)", "Pontos Totais", "Participações", "Média de Pontos"]
+                        ],
+                    ],
+                    ignore_index=True,
+                )
 
-                # export CSV global (sem cores)
                 st.download_button(
-                    "Descarregar ranking global (CSV)",
-                    data=tabela_restante.to_csv(index=False).encode("utf-8"),
-                    file_name=f"ranking_global_{t_id}.csv",
+                    "Descarregar ranking (CSV)",
+                    data=ranking_full.to_csv(index=False).encode("utf-8"),
+                    file_name=f"ranking_{t_id}.csv",
                     mime="text/csv",
                 )
 
@@ -3049,13 +3082,6 @@ def page_tournament(t_id: str):
                         file_name=f"ranking_mensal_{t_id}_{year_sel}_{month_sel}.csv",
                         mime="text/csv",
                     )
-
-        st.download_button(
-            "Descarregar ranking (CSV)",
-            data=tabela_restante.to_csv(index=False).encode("utf-8"),
-            file_name=f"ranking_{t_id}.csv",
-            mime="text/csv",
-        )
 
         if expanded.empty:
             st.info("Ainda não existem dados para este torneio.")
