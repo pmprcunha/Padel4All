@@ -2882,7 +2882,7 @@ def page_tournament(t_id: str):
             "Navegação",
             options=["Ranking", "Resultados", "Estatísticas"],
             index=["Ranking", "Resultados", "Estatísticas"].index(st.session_state.get("sec", "Ranking")),
-            horizontal=True,
+            horizontal=False,
             label_visibility="collapsed",
         )
         st.session_state["sec"] = sec
