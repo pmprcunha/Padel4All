@@ -6,7 +6,7 @@ from datetime import datetime
 from core.auth import admin_login_sidebar, is_admin
 from core.constants import TOURNAMENTS, MONTH_INDEX, MONTH_ABBR_PT, get_data_file_for_model
 from core.styles import header, podium_with_tooltips
-from data.ranking import load_data, expand_results, compute_ranking, players_index, compute_ranking_with_momentum
+from data.ranking import load_data, expand_results, compute_ranking, players_index, compute_ranking_with_momentum, compute_monthly_ranking_with_momentum
 from tournaments.storage import create_or_open_event_for_model
 from tournaments.updown import order_courts_desc
 
@@ -154,6 +154,7 @@ def page_tournament(t_id: str):
             )
 
         with tab_month:
+            # Selecionar Ano e Mês disponíveis neste torneio
             col1, col2 = st.columns(2)
             with col1:
                 years = sorted(expanded["Year"].dropna().unique(), reverse=True)
@@ -164,28 +165,77 @@ def page_tournament(t_id: str):
                     key=lambda mm: MONTH_INDEX.get(mm, 99),
                 )
                 default_month_idx = len(months) - 1 if months else 0
-                month_sel = st.selectbox("Mês", options=months, index=default_month_idx, key=f"rk_month_{t_id}")
-
-            expanded_month = expanded[(expanded["Year"] == year_sel) & (expanded["Month"] == month_sel)].copy()
-            if expanded_month.empty:
-                st.info("Sem dados para o ano/mês selecionado.")
-            else:
-                rk_month = compute_ranking(expanded_month)
-                top3_m = rk_month.head(3)
-                podium_with_tooltips(top3_m)
-
-                restante_m = rk_month.iloc[3:].copy()
-                if not restante_m.empty:
-                    st.dataframe(restante_m, use_container_width=True, height=540, hide_index=True)
-                else:
-                    st.info("Sem posições adicionais além do pódio para este mês.")
-
-                st.download_button(
-                    f"Descarregar ranking mensal ({month_sel} {year_sel})",
-                    data=rk_month.to_csv(index=False).encode("utf-8"),
-                    file_name=f"ranking_mensal_{t_id}_{year_sel}_{month_sel}.csv",
-                    mime="text/csv",
+                month_sel = st.selectbox(
+                    "Mês",
+                    options=months,
+                    index=default_month_idx,
+                    key=f"rk_month_{t_id}",
                 )
+
+        # Filtrar apenas aquele ano/mês (para validação rápida)
+        expanded_month = expanded[
+            (expanded["Year"] == year_sel) & (expanded["Month"] == month_sel)
+        ].copy()
+
+        if expanded_month.empty:
+            st.info("Sem dados para o ano/mês selecionado.")
+        else:
+            # ✅ Ranking mensal com Var (vs mês anterior disponível)
+            top3_m, restante_m = compute_monthly_ranking_with_momentum(expanded, year_sel, month_sel)
+
+            # pódio mensal
+            podium_with_tooltips(top3_m)
+
+            # tabela (4.º lugar em diante) com Var
+            if not restante_m.empty:
+                def _color_delta(val: str) -> str:
+                    if isinstance(val, str):
+                        v = val.strip()
+                        if v.startswith("▲"):
+                            return "color: #3bd16f; font-weight: 700;"
+                        if v.startswith("▼"):
+                            return "color: #ff4d4d; font-weight: 700;"
+                    return ""
+
+                styled_m = (
+                    restante_m
+                    .style
+                    .applymap(_color_delta, subset=["Var"])
+                    .set_properties(subset=["Pos", "Var"], **{
+                        "text-align": "center",
+                        "font-weight": "600",
+                    })
+                    .format({"Média de Pontos": "{:.2f}"})
+                )
+
+                st.dataframe(
+                    styled_m,
+                    use_container_width=True,
+                    height=540,
+                    hide_index=True,
+                )
+            else:
+                st.info("Sem posições adicionais além do pódio para este mês.")
+
+            # export CSV mensal (com Pos e Var)
+            ranking_full_m = pd.concat(
+                [
+                    top3_m.assign(Pos=[1, 2, 3], Var=["", "", ""])[
+                        ["Pos", "Var", "Jogador(a)", "Pontos Totais", "Participações", "Média de Pontos"]
+                    ],
+                    restante_m[
+                        ["Pos", "Var", "Jogador(a)", "Pontos Totais", "Participações", "Média de Pontos"]
+                    ],
+                ],
+                ignore_index=True,
+            )
+
+            st.download_button(
+                f"Descarregar ranking mensal ({month_sel} {year_sel})",
+                data=ranking_full_m.to_csv(index=False).encode("utf-8"),
+                file_name=f"ranking_mensal_{t_id}_{year_sel}_{month_sel}.csv",
+                mime="text/csv",
+            )
 
     elif sec == "Resultados":
         if expanded.empty:

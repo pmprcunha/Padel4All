@@ -152,7 +152,7 @@ def players_index(expanded: pd.DataFrame) -> pd.DataFrame:
     if partners_df.empty:
         tops = pd.DataFrame(columns=["Jogador(a)", "Parceiras(os) frequentes"])
     else:
-        TOP_N = 5
+        TOP_N = 3
         counts = (
             partners_df.groupby(["Jogador(a)", "Parceiro(a)"])
             .size()
@@ -261,3 +261,108 @@ def compute_ranking_with_momentum(expanded: pd.DataFrame) -> Tuple[pd.DataFrame,
         del current_full["__PosAtual__"]
 
     return top3, resto
+
+
+def compute_monthly_ranking_with_momentum(
+    expanded: pd.DataFrame,
+    year_sel: int,
+    month_sel: str,
+) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    """
+    Ranking mensal com variação (Var) vs mês anterior disponível (no mesmo torneio).
+    Devolve (top3, resto_formatado) no mesmo formato do Ranking Global.
+    """
+
+    # Filtrar mês atual
+    expanded_month = expanded[
+        (expanded["Year"] == year_sel) & (expanded["Month"] == month_sel)
+    ].copy()
+
+    current_full = compute_ranking(expanded_month).copy()
+    if current_full.empty:
+        empty_cols = [
+            "Pos",
+            "Var",
+            "Jogador(a)",
+            "Pontos Totais",
+            "Participações",
+            "Média de Pontos",
+        ]
+        return current_full.head(3), pd.DataFrame(columns=empty_cols)
+
+    # Lista cronológica de (Year, Month) existentes no dataset
+    ym = (
+        expanded[["Year", "Month"]]
+        .dropna()
+        .drop_duplicates()
+        .assign(MonthOrder=lambda df: df["Month"].map(MONTH_INDEX).fillna(99).astype(int))
+        .sort_values(["Year", "MonthOrder"], ascending=[True, True])
+    )
+    ym_list = [(int(r.Year), str(r.Month)) for r in ym.itertuples(index=False)]
+
+    # Determinar mês anterior "disponível"
+    prev_pos_map: Dict[str, int] = {}
+    try:
+        idx_now = ym_list.index((int(year_sel), str(month_sel)))
+        if idx_now >= 1:
+            prev_y, prev_m = ym_list[idx_now - 1]
+            prev_df = expanded[(expanded["Year"] == prev_y) & (expanded["Month"] == prev_m)].copy()
+            prev_ranking = compute_ranking(prev_df)
+
+            prev_pos_map = {
+                row["Jogador(a)"]: int(idx)
+                for idx, row in prev_ranking.iterrows()
+            }
+    except ValueError:
+        # (year_sel, month_sel) não existe por algum motivo -> sem var
+        prev_pos_map = {}
+
+    # Posição atual
+    current_full["__PosAtual__"] = range(1, len(current_full) + 1)
+
+    pos_list = []
+    delta_list = []
+
+    for _, row in current_full.iterrows():
+        nome = row["Jogador(a)"]
+        pos_now = int(row["__PosAtual__"])
+        pos_prev = prev_pos_map.get(nome)
+
+        pos_list.append(pos_now)
+
+        if pos_prev is None:
+            delta_list.append("")
+        else:
+            diff = pos_prev - pos_now  # positivo = subiu
+            if diff > 0:
+                delta_list.append(f"▲ +{diff}")
+            elif diff < 0:
+                delta_list.append(f"▼ {diff}")  # diff já é negativo
+            else:
+                delta_list.append("")
+
+    current_full["Pos"] = pos_list
+    current_full["Var"] = delta_list
+
+    top3 = current_full.head(3).drop(
+        columns=["__PosAtual__", "Pos", "Var"], errors="ignore"
+    )
+
+    resto = current_full.iloc[3:].copy()
+    if not resto.empty:
+        resto = resto[
+            [
+                "Pos",
+                "Var",
+                "Jogador(a)",
+                "Pontos Totais",
+                "Participações",
+                "Média de Pontos",
+            ]
+        ]
+
+    if "__PosAtual__" in current_full.columns:
+        del current_full["__PosAtual__"]
+
+    return top3, resto
+
