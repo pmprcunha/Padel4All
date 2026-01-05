@@ -160,7 +160,7 @@ def page_tournament(t_id: str):
             )
 
             st.download_button(
-                "Descarregar ranking (CSV)",
+                "Descarregar ranking",
                 data=ranking_full.to_csv(index=False).encode("utf-8"),
                 file_name=f"ranking_{t_id}.csv",
                 mime="text/csv",
@@ -308,7 +308,7 @@ def page_tournament(t_id: str):
             st.info("Sem posições adicionais além do pódio.")
 
         st.download_button(
-            "Descarregar resultados (CSV)",
+            "Descarregar resultados",
             data=team_view.rename(columns={"Position": "Posição", "Team": "Equipa"}).to_csv(index=False).encode("utf-8"),
             file_name=f"resultados_{t_id}_{year}_{month}_{day:02d}.csv",
             mime="text/csv",
@@ -393,7 +393,7 @@ def page_tournament(t_id: str):
                 st.pyplot(fig2, use_container_width=True)
 
         st.download_button(
-            "Descarregar lista (CSV)",
+            "Descarregar lista",
             data=df_list.to_csv(index=True).encode("utf-8"),
             file_name=f"estatisticas_{t_id}.csv",
             mime="text/csv",
